@@ -621,25 +621,8 @@ function bracketView() {
 /* =====================================================================
    CÁC TRANG
    ===================================================================== */
-/* ---------- quy trình 6 bước ---------- */
-function workflowBar() {
-  const t = T(), ms = visibleMatches(), done = ms.filter(m => m.status === "done").length, cf = ms.length ? L.conflicts(t).length : 0;
-  const steps = [
-    ["info", "Tạo giải đấu", "Tên giải · Logo · Thời gian · Sân bóng", t.name && t.venue && t.start && t.end ? "ok" : "todo"],
-    ["teams", "Nhập danh sách đội", "Mã đội · Tên đội · Logo · Cầu thủ", t.teams.length >= 2 ? "ok" : "todo"],
-    ["format", "Chọn thể thức", "Vòng tròn · Chia bảng · Loại trực tiếp", t.groups.length || (t.format.type === "ko" && t.koOrder.length) || ms.length ? "ok" : "todo"],
-    ["format", "Sinh lịch thi đấu", cf ? `Có ${cf} chỗ trùng lịch cần sửa` : "Bốc thăm · Xếp sân · Xếp giờ · Kiểm tra trùng lịch", !ms.length ? "todo" : cf ? "warn" : "ok"],
-    ["results", "Nhập kết quả", ms.length ? `Đã nhập ${done}/${ms.length} trận` : "Tỷ số · Bàn thắng · Thẻ phạt", !done ? "todo" : done === ms.length ? "ok" : "doing"],
-    ["standings", "Tự động cập nhật", "Bảng xếp hạng · Thống kê · Đội đi tiếp · Poster kết quả", done ? "ok auto" : "todo auto"]
-  ];
-  const cur = steps.findIndex(s => !s[3].startsWith("ok"));
-  return `<div class="workflow">${steps.map(([v, h, p, st], i) => `<button class="wf ${st} ${i === cur ? "cur" : ""}" data-act="go" data-view="${v}">
-      <span class="wf-n">${st.startsWith("ok") ? `<i class="fa-solid fa-check"></i>` : st === "warn" ? `<i class="fa-solid fa-exclamation"></i>` : i + 1}</span>
-      <span class="wf-t"><b>Bước ${i + 1} — ${h}</b><small>${esc(p)}</small></span></button>`).join(`<i class="fa-solid fa-chevron-right wf-arrow"></i>`)}</div>`;
-}
-
 const VIEWS = {
-  overview: () => workflowBar() + `<div class="grid-ov">${cardHero()}${cardInfo()}${cardBanner()}${cardTeams()}${cardFormat()}${cardSchedSettings()}${cardSchedule()}${cardStandings()}${cardScorers()}${cardCards()}</div>`,
+  overview: () => `<div class="grid-ov">${cardHero()}${cardInfo()}${cardBanner()}${cardTeams()}${cardFormat()}${cardSchedSettings()}${cardSchedule()}${cardStandings()}${cardScorers()}${cardCards()}</div>`,
   info: () => title("Thông tin giải đấu", "Tên, thời gian, địa điểm và banner hiển thị") +
     `<div class="grid3">${cardHero("span3")}${cardInfo("span2")}${cardBanner()}</div>`,
   teams: () => title("Đội bóng", `${T().teams.length} đội · bấm biểu tượng bút để sửa tên, logo, màu áo, danh sách cầu thủ`,
